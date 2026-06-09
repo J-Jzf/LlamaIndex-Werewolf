@@ -1,0 +1,11 @@
+.env
+app.mp4
+*.mp4
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+.env.*
