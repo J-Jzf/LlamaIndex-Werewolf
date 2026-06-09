@@ -488,7 +488,7 @@ class WerewolfGame:
                 f"核心技能：{info.get('ability', '未知')}，"
                 f"获胜条件：{info.get('win_condition', '未知')}"
             )
-        return "本局角色配置：" + "；".join(parts) + "。规则补充：狼人每晚必须行动。"
+        return "本局角色配置：" + "；".join(parts) + "。规则补充：狼人每晚可以选择刀一个玩家或者空刀。"
 
     def build_role_count_summary(self) -> str:
         """生成给前端公开显示的角色数量摘要。"""

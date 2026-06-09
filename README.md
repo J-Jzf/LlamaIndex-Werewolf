@@ -787,7 +787,7 @@ python main_cn.py
 - 私密/公开消息传递
   - `announce()` 广播公开消息，`broadcast_wolf_chat()` 和 `remember_private_event()` 隔离私密信息
 - 短期记忆和长期记忆设计
-  - `memory` 保留最近三轮，`long_term_memory` 通过 LLM 摘要玩家发言保存关键事件/身份线索/私密技能结果
+  - `memory` 保留最近一轮，`long_term_memory` 通过 LLM 摘要玩家发言保存关键事件/身份线索/私密技能结果
 - 人类参与 Agent 流程
   - `pending_action` 暂停游戏，Flask 表单收集真人发言、投票和夜晚技能
 - Pydantic 结构化输出
