@@ -784,10 +784,14 @@ python main_cn.py
 
 - 多 Agent 角色建模
   - `WolfPlayer` 保存身份/状态，`LlamaIndexAgent` 按角色 system prompt 调用 LLM
-- 私密/公开消息传递
+- 私密/公开消息传递（核心就是：选择给哪个 WolfPlayer 对象写入记忆。）
   - `announce()` 广播公开消息，`broadcast_wolf_chat()` 和 `remember_private_event()` 隔离私密信息
+    - `announce()`做的事：所有的log的内容保存至self.log，然后判断是否public，若是，则通过`observe()`把这条公开消息写进每个玩家的短期记忆。`observe()`负责写入短期记忆和判断短期记忆是否超轮。公开短期：遍历所有玩家observe；狼队私密短期：只写给狼人列表observe；私密短期：只写给某一个玩家observe。`broadcast_wolf_chat()` 只给当前活着的狼人对象 `observe()`，所以狼人夜聊只进入狼人玩家的短期记忆。如果真人玩家也是狼人，还会额外写一条前端私密日志。
+    - `remember_private_event()` 只接收一个明确的 `player` 对象，它只负责“把内容写进这个玩家的长期记忆”。私密长期记忆的隔离同样靠的是调用方选对 `player` 对象，而不是 `remember_private_event()` 自己按 role 判断。公开的长期记忆则是通过 `remember_public_event()` 遍历所有玩家。
 - 短期记忆和长期记忆设计
   - `memory` 保留最近一轮，`long_term_memory` 通过 LLM 摘要玩家发言保存关键事件/身份线索/私密技能结果
+    - 长期记忆中，“事件”类都是代码直接写的，不经过LLM摘要；公开发言会先让 LLM 判断有没有有效信息，并生成摘要，有效才写入长期记忆。
+    - 白天公开发言通过 `record_identity_claim()` 提取摘要（通过`llm.chat`）并记录公开发言中身份声称和冲突线索（作为关键线索）。
 - 人类参与 Agent 流程
   - `pending_action` 暂停游戏，Flask 表单收集真人发言、投票和夜晚技能
 - Pydantic 结构化输出
